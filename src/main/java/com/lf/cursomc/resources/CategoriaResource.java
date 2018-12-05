@@ -10,14 +10,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lf.cursomc.domain.Categoria;
 import com.lf.cursomc.services.CategoriaService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/categorias")
+@Api(value = "Category Manager System",description = "Operations pertaining to category in category Manager")
 public class CategoriaResource {
 	
 	@Autowired
 	private CategoriaService service;
 	
 	@RequestMapping(value="/{id}",method = RequestMethod.GET)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200,message = "sucessfully"),
+			@ApiResponse(code = 400,message = "Bad Request"),
+			@ApiResponse(code = 401,message = "request unauthorized")
+	})
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Categoria obj = service.buscar(id);
 		

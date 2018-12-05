@@ -7,13 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
+@ApiModel(description = "All details about the category model")
 public class Categoria implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(notes = "the category's Id, it's auto increment")
 	private Integer id;
+	@ApiModelProperty(notes = "the category's name attributes")
 	private String nome;
 	
 	public Categoria() {
