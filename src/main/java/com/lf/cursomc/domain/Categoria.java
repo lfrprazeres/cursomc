@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,8 +28,10 @@ public class Categoria implements Serializable {
 	@ApiModelProperty(notes = "the categories' name")
 	private String nome;
 	
+	@JsonManagedReference
 	/* como eu fiz o mapeamento do lado de produto, aqui eu só preciso usar mappedBy para não precisar refazer tudo*/
-	@ManyToMany(mappedBy = "categorias")
+	@ManyToMany(mappedBy = "categorias",fetch = FetchType.EAGER)
+	/* pelo erro de deserializable virar um loop infinito retornando erro 500, usa-se essa notação */
 	private List<Produto> produtos = new ArrayList<>();
 	
 	public Categoria() {

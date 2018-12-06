@@ -29,8 +29,8 @@ public class CategoriaResource {
 			@ApiResponse(code = 401,message = "request unauthorized")
 	})
 	public ResponseEntity<?> find(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);
 		
+		Categoria obj = service.buscar(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	

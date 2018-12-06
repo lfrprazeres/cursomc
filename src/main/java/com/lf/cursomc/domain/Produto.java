@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,12 +32,14 @@ public class Produto implements Serializable{
 	@ApiModelProperty(notes = "the products' price")
 	private Double preco;
 	
-	@ManyToMany
+	@JsonBackReference
+	@ManyToMany(fetch=FetchType.EAGER)
 	/* como é muitos para muitos deve-se criar uma tabela entre a relação das 2 tabelas com o id de cada entidade relacionada */
 	@JoinTable(name= /* name representa o nome da tabela que vai ter esse id */"PRODUTO_CATEGORIA",
 		joinColumns = /* seta o nome da primeira chave estrangeira */ @JoinColumn(name = "produto_id"),
 		inverseJoinColumns = /* seta a segunda chave estrangeira*/ @JoinColumn(name = "categoria_id")
 	)
+	/* Como eu quero que apareça somente do oturo lado, ele omite a lista de categorias pois já está buscando do outro lado */
 	private List<Categoria> categorias = new ArrayList<>();
 	
 	public Produto() {
