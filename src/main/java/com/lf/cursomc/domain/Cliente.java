@@ -6,11 +6,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import com.lf.cursomc.domain.enums.TipoCliente;
 
+@Entity
 public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String email;
@@ -19,12 +30,17 @@ public class Cliente implements Serializable {
 	 * ele será usado como inteiro aqui*/
 	private Integer tipo;
 	
+	/* A parte OneToMany (como o cliente é sempre um que possui mais endereços, essa será a OneToMany)
+	 * tem que ter o mappedBy para dizer por quem foi mapeado, no caso o campo cliente*/
+	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	/* Como telefone só vai existir um string com o número,
 	 * será criado um Set (que se comporta como um conjunto, logo não aceita repetições)
 	 * para guardar os números de telefone */
 	
+	@ElementCollection
+	@CollectionTable(name="TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	
 	public Cliente() {
