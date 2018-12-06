@@ -16,18 +16,24 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @RequestMapping(value = "/categorias")
+/* Api é um mapeamento do swagger que você pode alterar a descrição final que será feita no http://localhost:8080/swagger-ui.html */
 @Api(value = "Category Manager System",description = "Operations pertaining to category in category Manager")
 public class CategoriaResource {
 	
 	@Autowired
 	private CategoriaService service;
 	
+	/* mesma coisa que @GetMapping("/{id}")*/
 	@RequestMapping(value="/{id}",method = RequestMethod.GET)
+	/* ApiResponses é um mapeamento do swagger que, dentro dele,
+	 *  contém x ApiResponse com um status http e uma mensagem para cada um */
 	@ApiResponses(value = {
 			@ApiResponse(code = 200,message = "sucessfully"),
 			@ApiResponse(code = 400,message = "Bad Request"),
 			@ApiResponse(code = 401,message = "request unauthorized")
 	})
+	/* ResponseEntity<?> define que poderá retornar um ResponseEntity de qualquer tipo,
+	 * @PathVariable é uma notação que mapeia o id do requestMapping ("/{id}) pro parâmetro id que vai estar na função */
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		
 		Categoria obj = service.buscar(id);

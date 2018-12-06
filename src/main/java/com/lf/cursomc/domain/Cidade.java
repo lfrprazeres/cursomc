@@ -14,10 +14,14 @@ public class Cidade implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	/* GeneratedValue seta como será atribuido esse ID,
+	 * colocando como estratégia IDENTITY, que é um recurso aceito no MYSQL, H2 entre outros*/
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	
+	/* Como a relação nesse lado da entidade é ManyToOne,
+	 * aqui que deverá ter a chave estrangeira representando qual entidade ela pertence*/
 	@ManyToOne
 	/* Aqui define qual será o nome da chave estrangeira no banco de dados */
 	@JoinColumn(name = "estado_id")
