@@ -3,11 +3,14 @@ package com.lf.cursomc.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Cidade implements Serializable{
@@ -21,8 +24,10 @@ public class Cidade implements Serializable{
 	private String nome;
 	
 	/* Como a relação nesse lado da entidade é ManyToOne,
-	 * aqui que deverá ter a chave estrangeira representando qual entidade ela pertence*/
-	@ManyToOne
+	 * aqui que deverá ter a chave estrangeira representando qual entidade ela pertence */
+	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
+	@JsonManagedReference
+	@ManyToOne(fetch = FetchType.EAGER)
 	/* Aqui define qual será o nome da chave estrangeira no banco de dados */
 	@JoinColumn(name = "estado_id")
 	private Estado estado;

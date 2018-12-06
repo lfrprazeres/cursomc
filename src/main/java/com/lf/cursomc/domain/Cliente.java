@@ -9,11 +9,16 @@ import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lf.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -32,14 +37,20 @@ public class Cliente implements Serializable {
 	
 	/* A parte OneToMany (como o cliente é sempre um que possui mais endereços, essa será a OneToMany)
 	 * tem que ter o mappedBy para dizer por quem foi mapeado, no caso o campo cliente*/
-	@OneToMany(mappedBy="cliente")
+	/* JsonManagedReference abilita a deserialização do array para evitar loops infinitos de loop */
+	@JsonManagedReference
+	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
+	@OneToMany(mappedBy="cliente",fetch = FetchType.EAGER)
 	private List<Endereco> enderecos = new ArrayList<>();
 	
 	/* Como telefone só vai existir um string com o número,
 	 * será criado um Set (que se comporta como um conjunto, logo não aceita repetições)
 	 * para guardar os números de telefone */
 	
-	@ElementCollection
+	/* Como não existe uma relação OneToMany ou ManyToOne, deve-se usar essas duas anotações para esse tipo de implementação
+	 * mais sobre isso em http://www.lovemesomecoding.com/2015/07/08/multiple-fetches-with-eager-type-in-hibernate-with-jpa/ */
+	@Fetch(FetchMode.SELECT)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name="TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 	

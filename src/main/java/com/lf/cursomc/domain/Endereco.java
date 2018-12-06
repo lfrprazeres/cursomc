@@ -3,11 +3,14 @@ package com.lf.cursomc.domain;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Endereco implements Serializable {
@@ -22,13 +25,16 @@ public class Endereco implements Serializable {
 	private String bairro;
 	private String cep;
 	
-	@ManyToOne
+	/* JsonBackReference bloqueia a deserialização por esse lado, evitando o loop infinito de json */
+	@JsonBackReference
+	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
 	/* Aqui será uma relação só de uma parte, logo só os endereços que contém a cidade, 
 	 * a cidade não contém endereços, logo será implementado somente aqui essa relação Endereço <-> Cidade */
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cidade_id")
 	private Cidade cidade;
 	
