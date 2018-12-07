@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Endereco implements Serializable {
@@ -26,7 +26,8 @@ public class Endereco implements Serializable {
 	private String cep;
 	
 	/* JsonBackReference bloqueia a deserialização por esse lado, evitando o loop infinito de json */
-	@JsonBackReference
+	/* @JsonBackReference seria usado aqui, mas foi substituido por @JsonIgnore*/
+	@JsonIgnore
 	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_id")

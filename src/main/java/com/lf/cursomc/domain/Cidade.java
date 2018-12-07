@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 public class Cidade implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -26,7 +24,7 @@ public class Cidade implements Serializable{
 	/* Como a relação nesse lado da entidade é ManyToOne,
 	 * aqui que deverá ter a chave estrangeira representando qual entidade ela pertence */
 	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
-	@JsonManagedReference
+	/* @JsonManagedReference seria usado aqui, porém foi substituido por json ignore na parte de JsonBackReference */
 	@ManyToOne(fetch = FetchType.EAGER)
 	/* Aqui define qual será o nome da chave estrangeira no banco de dados */
 	@JoinColumn(name = "estado_id")

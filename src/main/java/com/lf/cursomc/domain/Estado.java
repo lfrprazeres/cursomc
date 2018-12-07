@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Estado implements Serializable{
@@ -24,7 +24,8 @@ public class Estado implements Serializable{
 	
 	/* mappedBy mapeia o outro lado, onde tem ManyToOne*/
 	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
-	@JsonBackReference
+	/* @JsonBackReference seria usado aqui, mas foi substituido por @JsonIgnore*/
+	@JsonIgnore
 	@OneToMany(mappedBy="estado",fetch = FetchType.EAGER)
 	private List<Cidade> cidades = new ArrayList<>();
 

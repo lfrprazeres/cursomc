@@ -11,8 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -28,7 +26,7 @@ public class Categoria implements Serializable {
 	@ApiModelProperty(notes = "the categories' name")
 	private String nome;
 	
-	@JsonManagedReference
+	/* @JsonManagedReference seria usado aqui, porém foi substituido por json ignore na parte de JsonBackReference */
 	/* como eu fiz o mapeamento do lado de produto, aqui eu só preciso usar mappedBy para não precisar refazer tudo*/
 	@ManyToMany(mappedBy = "categorias",fetch = FetchType.EAGER)
 	/* pelo erro de deserializable virar um loop infinito retornando erro 500, usa-se essa notação */

@@ -16,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
@@ -36,7 +35,8 @@ public class Produto implements Serializable{
 	@ApiModelProperty(notes = "the products' price")
 	private Double preco;
 	
-	@JsonBackReference
+	/* @JsonBackReference seria usado aqui, mas foi substituido por @JsonIgnore*/
+	@JsonIgnore
 	@ManyToMany(fetch=FetchType.EAGER)
 	/* como é muitos para muitos deve-se criar uma tabela entre a relação das 2 tabelas com o id de cada entidade relacionada */
 	@JoinTable(name= /* name representa o nome da tabela que vai ter esse id */"PRODUTO_CATEGORIA",

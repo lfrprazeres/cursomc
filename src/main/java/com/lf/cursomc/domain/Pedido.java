@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
@@ -34,12 +33,12 @@ public class Pedido implements Serializable {
 	/* Essa notação cascade deverá ser usada para evitar erro entity transient 
 	 * usado em relações OneToOne */
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.EAGER)
-	@JsonManagedReference
+	/* @JsonManagedReference seria usado aqui, porém foi substituido por json ignore na parte de JsonBackReference */
 	private Pagamento pagamento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_id")
-	@JsonManagedReference
+	/* @JsonManagedReference seria usado aqui, porém foi substituido por json ignore na parte de JsonBackReference */
 	private Cliente cliente;
 	
 	@ManyToOne

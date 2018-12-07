@@ -18,8 +18,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lf.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -37,13 +36,14 @@ public class Cliente implements Serializable {
 	private Integer tipo;
 	
 	@OneToMany(mappedBy="cliente")
-	@JsonBackReference
+	/* @JsonBackReference seria usado aqui, mas foi substituido por @JsonIgnore*/
+	@JsonIgnore
 	private List<Pedido> pedidos = new ArrayList<>();
 	
 	/* A parte OneToMany (como o cliente é sempre um que possui mais endereços, essa será a OneToMany)
 	 * tem que ter o mappedBy para dizer por quem foi mapeado, no caso o campo cliente*/
 	/* JsonManagedReference abilita a deserialização do array para evitar loops infinitos de loop */
-	@JsonManagedReference
+	/* @JsonManagedReference seria usado aqui, porém foi substituido por json ignore na parte de JsonBackReference */
 	/* fetch = FetchType.EAGER evita o erro LazyInitializationException, pois ele mantém a busca dos itens "lazy", ou seja, em uma busca só */
 	@OneToMany(mappedBy="cliente",fetch = FetchType.EAGER)
 	private List<Endereco> enderecos = new ArrayList<>();
