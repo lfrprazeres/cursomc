@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lf.cursomc.domain.enums.TipoCliente;
 
@@ -36,6 +37,7 @@ public class Cliente implements Serializable {
 	private Integer tipo;
 	
 	@OneToMany(mappedBy="cliente")
+	@JsonBackReference
 	private List<Pedido> pedidos = new ArrayList<>();
 	
 	/* A parte OneToMany (como o cliente é sempre um que possui mais endereços, essa será a OneToMany)

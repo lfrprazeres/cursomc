@@ -16,7 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
@@ -25,16 +26,20 @@ public class Pedido implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	/* Formata o json pra como quer que apareça quando chamar */
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	private Date instance;
 	
 	/* Essa notação cascade deverá ser usada para evitar erro entity transient 
 	 * usado em relações OneToOne */
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.EAGER)
+	@JsonManagedReference
 	private Pagamento pagamento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_id")
-	@JsonBackReference
+	@JsonManagedReference
 	private Cliente cliente;
 	
 	@ManyToOne

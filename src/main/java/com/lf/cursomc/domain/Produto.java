@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,8 +44,12 @@ public class Produto implements Serializable{
 		inverseJoinColumns = /* seta a segunda chave estrangeira*/ @JoinColumn(name = "categoria_id")
 	)
 	/* Como eu quero que apareça somente do oturo lado, ele omite a lista de categorias pois já está buscando do outro lado */
+	
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	
+	/* Diz para o json nem reparar que esse List exista, logo não vai ser serializado */
+	@JsonIgnore
 	/* Como a tabela ItemPedido está intermediando pedido e produto, 
 	 * deve-se criar um conjunto com os itens para que o produto saiba quem são os itens desse produto */
 	@OneToMany(mappedBy = "id.produto")
@@ -61,6 +66,7 @@ public class Produto implements Serializable{
 		this.preco = preco;
 	}
 	
+	@JsonIgnore
 	public List<Pedido> getPedidos(){
 		List<Pedido> lista = new ArrayList<>();
 		for(ItemPedido x : itens) {

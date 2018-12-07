@@ -5,10 +5,14 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	/* Diz para o json nem reparar que esse ItemPedidoPK exista, logo não vai ser serializado */
+	@JsonIgnore
 	/* ID imbutido em uma classe auxiliar*/
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
@@ -67,6 +71,7 @@ public class ItemPedido implements Serializable {
 	
 	/* Faz-se os getters de Produto e Pedido aqui manualmente para que eu não precise acessar o ID do ItemPedidoPK para acessar eles
 	 * (O que não faria muito sentido) */
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
