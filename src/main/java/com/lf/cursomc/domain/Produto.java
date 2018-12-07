@@ -2,7 +2,9 @@ package com.lf.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -42,6 +45,11 @@ public class Produto implements Serializable{
 	/* Como eu quero que apareça somente do oturo lado, ele omite a lista de categorias pois já está buscando do outro lado */
 	private List<Categoria> categorias = new ArrayList<>();
 	
+	/* Como a tabela ItemPedido está intermediando pedido e produto, 
+	 * deve-se criar um conjunto com os itens para que o produto saiba quem são os itens desse produto */
+	@OneToMany(mappedBy = "id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
 	public Produto() {
 		
 	}
@@ -51,6 +59,14 @@ public class Produto implements Serializable{
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+	}
+	
+	public List<Pedido> getPedidos(){
+		List<Pedido> lista = new ArrayList<>();
+		for(ItemPedido x : itens) {
+			lista.add(x.getPedido());
+		}
+		return lista;
 	}
 
 	public Integer getId() {
@@ -83,6 +99,14 @@ public class Produto implements Serializable{
 
 	public void setCategorias(List<Categoria> categorias) {
 		this.categorias = categorias;
+	}
+
+	public Set<ItemPedido> getItens() {
+		return itens;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
 	}
 
 	@Override
