@@ -1,5 +1,6 @@
 package com.lf.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.lf.cursomc.domain.Cidade;
 import com.lf.cursomc.domain.Cliente;
 import com.lf.cursomc.domain.Endereco;
 import com.lf.cursomc.domain.Estado;
+import com.lf.cursomc.domain.Pagamento;
+import com.lf.cursomc.domain.PagamentoComBoleto;
+import com.lf.cursomc.domain.PagamentoComCartao;
+import com.lf.cursomc.domain.Pedido;
 import com.lf.cursomc.domain.Produto;
+import com.lf.cursomc.domain.enums.EstadoPagamento;
 import com.lf.cursomc.domain.enums.TipoCliente;
 import com.lf.cursomc.repositories.CategoriaRepository;
 import com.lf.cursomc.repositories.CidadeRepository;
 import com.lf.cursomc.repositories.ClienteRepository;
 import com.lf.cursomc.repositories.EnderecoRepository;
 import com.lf.cursomc.repositories.EstadoRepository;
+import com.lf.cursomc.repositories.PagamentoRepository;
+import com.lf.cursomc.repositories.PedidoRepository;
 import com.lf.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class CursomcApplication implements CommandLineRunner{
 	private ClienteRepository clienteRepositorio;
 	@Autowired
 	private EnderecoRepository enderecoRepositorio;
+	@Autowired
+	private PedidoRepository pedidoRepositorio;
+	@Autowired
+	private PagamentoRepository pagamentoRepositorio;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -110,7 +122,22 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		enderecoRepositorio.saveAll(Arrays.asList(e1,e2));
 		
+		/* SimpleDateFormat é um tipo padrão do java que você pode determinar o tipo de Date que você quer usar*/
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido ped1 = new Pedido(null,sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null,sdf.parse("10/10/2017 19:35"), cli1, e2);
 		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		/* Usei set e não direto no constructor para poder instanciar pagamento antes de setar ele em pedido */
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2 , sdf.parse("20/10/2017 00:00"), null );
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		/* Pedido é salvo antes do pagamento pois o pedido é independente do pagamento */
+		pedidoRepositorio.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepositorio.saveAll(Arrays.asList(pagto1,pagto2));
 	}
 		
 }

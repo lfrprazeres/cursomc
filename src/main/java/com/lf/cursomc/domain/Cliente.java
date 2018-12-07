@@ -35,6 +35,9 @@ public class Cliente implements Serializable {
 	 * ele será usado como inteiro aqui*/
 	private Integer tipo;
 	
+	@OneToMany(mappedBy="cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
+	
 	/* A parte OneToMany (como o cliente é sempre um que possui mais endereços, essa será a OneToMany)
 	 * tem que ter o mappedBy para dizer por quem foi mapeado, no caso o campo cliente*/
 	/* JsonManagedReference abilita a deserialização do array para evitar loops infinitos de loop */
@@ -58,6 +61,7 @@ public class Cliente implements Serializable {
 		
 	}
 
+	/* Não esquecer que COLEÇÕES(Arrays) NÃO SE COLOCAM EM CONSTRUCTOR */
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
 		this.id = id;
@@ -125,6 +129,14 @@ public class Cliente implements Serializable {
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	@Override
