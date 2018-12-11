@@ -34,9 +34,10 @@ public class ClienteResource {
 	})
 	/* ResponseEntity<?> define que poderá retornar um ResponseEntity de qualquer tipo,
 	 * @PathVariable é uma notação que mapeia o id do requestMapping ("/{id}) pro parâmetro id que vai estar na função */
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	/* Aqui poderia ser ResponseEntity<?>*/
+	public ResponseEntity<Cliente> find(@PathVariable Integer id) {
 		
-		Cliente obj = service.buscar(id);
+		Cliente obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	

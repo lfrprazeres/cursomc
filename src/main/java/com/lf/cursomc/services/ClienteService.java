@@ -19,7 +19,7 @@ public class ClienteService {
 	 * consiga achar o ID, nesse caso é retornado um ObjectNotFoundException (feito
 	 * manualmente) com a mensagem de erro
 	 */
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		Cliente obj = repositorio.findById(id).orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 		return obj;

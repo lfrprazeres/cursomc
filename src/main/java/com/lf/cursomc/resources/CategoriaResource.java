@@ -37,10 +37,11 @@ public class CategoriaResource {
 			@ApiResponse(code = 401,message = "request unauthorized")
 	})
 	/* ResponseEntity<?> define que poderá retornar um ResponseEntity de qualquer tipo,
-	 * @PathVariable é uma notação que mapeia o id do requestMapping ("/{id}) pro parâmetro id que vai estar na função */
-	public ResponseEntity<?> find(@PathVariable Integer id) {
+	 * @PathVariable é uma notação que mapeia o id do requestMapping ("/{id}") pro parâmetro id que vai estar na função */
+	/* Aqui poderia ser ResponseEntity<?>*/
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
@@ -52,6 +53,13 @@ public class CategoriaResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj,@PathVariable Integer id){
+		/* Caso o parâmetro seja um objeto, pode ser usado obj.setId(id) para confirmar se o obj a ser atualizado é esse */
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 }

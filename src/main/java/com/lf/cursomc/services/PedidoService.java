@@ -19,7 +19,7 @@ public class PedidoService {
 	 * consiga achar o ID, nesse caso é retornado um ObjectNotFoundException (feito
 	 * manualmente) com a mensagem de erro
 	 */
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		Pedido obj = repositorio.findById(id).orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 		return obj;
