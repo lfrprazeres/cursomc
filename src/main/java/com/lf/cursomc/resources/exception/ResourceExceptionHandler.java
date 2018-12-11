@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.lf.cursomc.services.exception.DataIntegrityException;
 import com.lf.cursomc.services.exception.ObjectNotFoundException;
 
 /* Essa notação é usada para Handlers, que são classes que intercepta um erro e trata ele fora da classe,
@@ -28,5 +29,16 @@ public class ResourceExceptionHandler {
 		/* Aqui retorna o status NOT_FOUND com o erro instanciado acima no corpo do erro */
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
+
+
+	/* Esse exceptionHandler trata o erro DataIntegrity error, que é causada quando tenta-se deletar uma classe que contém integridade referenciada.
+	 * Ela retornaria erro 500, porém não queremos que retorne erro de servidor, e sim 400(bad request), que nos convém mais, por isso ela deverá
+	 * ser tratada. */
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request){
+		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(),e.getMessage(),System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
+	
 	
 }

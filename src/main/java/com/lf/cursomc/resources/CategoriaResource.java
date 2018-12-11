@@ -62,4 +62,16 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@RequestMapping(value="/{id}",method = RequestMethod.DELETE)
+	/* É do tipo void pois quando deletar vai retornar algo vazio */
+	/* No caso do DELETE com classes associada dará status 500 para manter a integridade referencial,
+	 * para acabar com esse erro terá 2 opções:
+	 * 1: apaga junto as classes que estão sendo referenciadas
+	 * 2: aborta a deleção, criando uma exceção personalizada para esse erro */
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+		
+	}
 }
