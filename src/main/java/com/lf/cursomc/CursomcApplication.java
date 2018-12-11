@@ -63,8 +63,13 @@ public class CursomcApplication implements CommandLineRunner{
 		/* Relação Categorias <-> Produtos é ManyToMany, logo terão arrays dos 2 lados para dizer quem se comunica com quem */
 		/* instanciando as categorias que vão para o banco de dados */
 		
-		Categoria cat1 = new Categoria(null,"Informatica");
-		Categoria cat2 = new Categoria(null,"Escritório");
+		Categoria cat1 = new Categoria(null, "Informatica");
+		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat3 = new Categoria(null, "Cama mesa e banho");
+		Categoria cat4 = new Categoria(null, "Eletrônicos");
+		Categoria cat5 = new Categoria(null, "Jardinagem");
+		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat7 = new Categoria(null, "Perfumaria");
 		
 		/* instanciando os produtos que vão para o banco de dados*/
 		
@@ -84,7 +89,7 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		/* Salva no banco de dados as categorias e os produtos */
 		
-		categoriaRepositorio.saveAll(Arrays.asList(cat1,cat2));
+		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7));
 		produtoRepositorio.saveAll(Arrays.asList(p1,p2,p3));
 		
 		

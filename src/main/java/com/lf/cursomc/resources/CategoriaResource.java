@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -91,6 +93,26 @@ public class CategoriaResource {
 		 * 5º Passo: instanciando esse CategoriaDTO, usa-se .collect(Collectors.toList()) para coletar esse objeto para a lista */
 		
 		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
+	
+	/* esse método findPage deve ter os mesmos parâmetros que no CategoriaService */
+	@RequestMapping(value = "/page", method = RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> findPage(
+			/* RequestParam é um mapeamento dizendo que esses parâmetros vão ser feitos como argumentos na URL e serão opcionais 
+			 * Value nesse caso significa o nome que tem que ser escrito para acessar esse argumento
+			 * defaultValue é o valor padrão caso não seja chamado
+			 */
+			@RequestParam(value="page",defaultValue="0") Integer page, 
+			/* o defaultValue é usado 24 pois ele é múltiplo de 1, 2, 3 e 4, ficando fácil de organizar de forma responsiva */
+			@RequestParam(value="linesPerPage",defaultValue="24") Integer linesPerPage, 
+			/* o defaultValue de orderBy pode ser ordenar por qualquer propriedade que queira */
+			@RequestParam(value="orderBy",defaultValue="nome") String orderBy, 
+			/* o defaultValue de direction pode ser ASC(ascendente) ou DESC(descendente) */
+			@RequestParam(value="direction",defaultValue="ASC") String direction) {
+		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
+		/* o Page já sendo do java 8, ele não precisa nem de .stream nem de .collect */
+		Page<CategoriaDTO> listDTO = list.map(obj -> new CategoriaDTO(obj));
 		return ResponseEntity.ok().body(listDTO);
 	}
 }
