@@ -1,6 +1,8 @@
 package com.lf.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lf.cursomc.domain.Categoria;
+import com.lf.cursomc.dto.CategoriaDTO;
 import com.lf.cursomc.services.CategoriaService;
 
 import io.swagger.annotations.Api;
@@ -73,5 +76,21 @@ public class CategoriaResource {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> list = service.findAll();
+		
+		/* Explicando a linha abaixo, cria-se essa lista para poder percorrer a lista de cima e transformar ela de Categoria para CategoriaDTO,
+		 * instanciando uma CategoriaDTO para cada categoria correspondente
+		 * 1º Passo: list.stream() é um recurso para percorrrer uma lista
+		 * 2º Passo: stream().map() faz uma operação para cada elemento da lista 
+		 * 3º Passo: dentro do map ele faz a operação Arrow function dando como parâmetro obj (que foi o item que foi percorrido)
+		 * 4º Passo: essa função anônima instancia um novo CategoriaDTO colocando a Categoria obj como parâmetro
+		 * 5º Passo: instanciando esse CategoriaDTO, usa-se .collect(Collectors.toList()) para coletar esse objeto para a lista */
+		
+		List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
 	}
 }
