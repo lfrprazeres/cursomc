@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 public class FieldMessage implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+	/* O nome do field que deu o erro de validação */
 	private String fieldName;
+	
+	/* A mensagem escrita para esse erro */
 	private String message;
 	
 	public FieldMessage() {
