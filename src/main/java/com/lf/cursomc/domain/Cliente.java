@@ -72,7 +72,7 @@ public class Cliente implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		/* Como o tipo é Integer, daria erro aqui pois está sendo do tipo TipoCliente e não Integer, 
 		 * logo usaremos o getter para pegar*/
-		this.tipo = tipo.getCodigo();
+		this.tipo = (tipo==null) ? null : tipo.getCodigo();
 	}
 
 	public Integer getId() {
