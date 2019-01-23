@@ -8,10 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.lf.cursomc.domain.Cidade;
 import com.lf.cursomc.domain.Cliente;
+import com.lf.cursomc.domain.Endereco;
+import com.lf.cursomc.domain.enums.TipoCliente;
 import com.lf.cursomc.dto.ClienteDTO;
+import com.lf.cursomc.dto.ClienteNewDTO;
 import com.lf.cursomc.repositories.ClienteRepository;
+import com.lf.cursomc.repositories.EnderecoRepository;
 import com.lf.cursomc.services.exception.DataIntegrityException;
 import com.lf.cursomc.services.exception.ObjectNotFoundException;
 
@@ -20,6 +26,9 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository repositorio;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepositorio;
 
 	/*
 	 * usa o recurso GET setado no ClienteResources para buscar Cliente pelo ID,
@@ -33,17 +42,26 @@ public class ClienteService {
 		return obj;
 	}
 
+	@Transactional
+	public Cliente insert(Cliente obj) {
+		obj.setId(null);
+		repositorio.save(obj);
+		enderecoRepositorio.saveAll(obj.getEnderecos());
+		return obj;
+		
+	}
+
 	public Cliente update(Cliente obj) {
 		/*
 		 * Aproveitando o código de cima para verificar se esse id existe, caso ele
 		 * exista lançar uma exceção
 		 * 
-		 * Diferente de Categoria, o Cliente é complexo e tem várias outras classes contidas nela
-		 * por isso temos que fazer um objeto intermediário para manter as informações que já existiam
-		 * e mudar somente o que queremos que seja mudado
+		 * Diferente de Categoria, o Cliente é complexo e tem várias outras classes
+		 * contidas nela por isso temos que fazer um objeto intermediário para manter as
+		 * informações que já existiam e mudar somente o que queremos que seja mudado
 		 */
 		Cliente newObj = find(obj.getId());
-		updateData(newObj,obj);
+		updateData(newObj, obj);
 		return repositorio.save(newObj);
 	}
 
@@ -79,18 +97,29 @@ public class ClienteService {
 	}
 
 	/*
-	 * Transforma um ClienteDTO em um Cliente para ser usado no
-	 * ClienteResource
+	 * Transforma um ClienteDTO em um Cliente para ser usado no ClienteResource
 	 */
 	public Cliente fromDTO(ClienteDTO objDto) {
-		return new Cliente(objDto.getId(),objDto.getNome(),objDto.getEmail(), null, null);
+		return new Cliente(objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
 	}
 	
+	public Cliente fromDTO(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null,objDto.getNome(),objDto.getEmail(),objDto.getCpfOuCnpj(),TipoCliente.toEnum(objDto.getTipo()));
+		Cidade cid = new Cidade(objDto.getCidadeId(),null,null);
+		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		cli.getEnderecos().add(end);
+		cli.getTelefones().add(objDto.getTelefone1());
+		if(objDto.getTelefone2() != null)
+			cli.getTelefones().add(objDto.getTelefone2());
+		if(objDto.getTelefone3() != null)
+			cli.getTelefones().add(objDto.getTelefone3());
+		return cli;
+	}
+
 	/* Um método para alterar o que o ClienteDTO aceita */
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
 	}
-	
 
 }
