@@ -67,6 +67,7 @@ public class CategoriaResource {
 	public ResponseEntity<Void> update(@Valid @RequestBody CategoriaDTO objDto,@PathVariable Integer id){
 		/* Caso o parâmetro seja um objeto, pode ser usado obj.setId(id) para confirmar se o obj a ser atualizado é esse */
 		Categoria obj = service.fromDTO(objDto);
+		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}

@@ -65,6 +65,7 @@ public class ClienteResource {
 		 * se o obj a ser atualizado é esse
 		 */
 		Cliente obj = service.fromDTO(objDto);
+		obj.setId(id);
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}

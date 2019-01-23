@@ -49,7 +49,7 @@ public abstract class Pagamento implements Serializable {
 		super();
 		this.id = id;
 		/* Usar o get aqui pois quero o Integer, não o enum */
-		this.estado = estado.getCodigo();
+		this.estado = (estado == null) ? null : estado.getCodigo();
 		this.pedido = pedido;
 	}
 

@@ -36,9 +36,17 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		/* Aproveitando o código de cima para verificar se esse id existe, caso ele exista lançar uma exceção */
-		find(obj.getId());
-		return repositorio.save(obj);
+		/*
+		 * Aproveitando o código de cima para verificar se esse id existe, caso ele
+		 * exista lançar uma exceção
+		 * 
+		 * Diferente de Categoria, o Categoria é complexo e tem várias outras classes contidas nela
+		 * por isso temos que fazer um objeto intermediário para manter as informações que já existiam
+		 * e mudar somente o que queremos que seja mudado
+		 */
+		Categoria newObj = find(obj.getId());
+		updateData(newObj,obj);
+		return repositorio.save(newObj);
 	}
 	
 	public void delete(Integer id) {
@@ -71,6 +79,11 @@ public class CategoriaService {
 	/* Transforma um CategoriaDTO em um Categoria para ser usado no CategoriaResource */
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(),objDto.getNome());
+	}
+	
+	/* Um método para alterar o que o CategoriaDTO aceita */
+	private void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
 	}
 	
 }
